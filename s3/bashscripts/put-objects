@@ -1,1 +1,27 @@
 #!/usr/bin/env bash
+
+# === put_object.sh ===
+# Usage: ./put_object.sh <bucket-name> <file-path> <s3-key>
+# Example: ./put_object.sh my-bucket ./photo.jpg images/photo.jpg
+
+# Exit if anything fails
+set -e
+
+# Arguments
+BUCKET_NAME=$1
+FILE_PATH=$2
+S3_KEY=$3
+
+# Check arguments
+if [ -z "$BUCKET_NAME" ] || [ -z "$FILE_PATH" ] || [ -z "$S3_KEY" ]; then
+  echo "Usage: $0 <bucket-name> <file-path> <s3-key>"
+  exit 1
+fi
+
+# Upload file to S3
+aws s3api put-object \
+  --bucket "$BUCKET_NAME" \
+  --key "$S3_KEY" \
+  --body "$FILE_PATH"
+
+echo "✅ Uploaded $FILE_PATH to s3://$BUCKET_NAME/$S3_KEY"

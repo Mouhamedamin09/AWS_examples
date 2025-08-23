@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+echo "== list bucket"
+
+aws s3api list-buckets \
+  | jq -r '
+    .Buckets 
+    | sort_by(.CreationDate) 
+    | reverse 
+    | (.[0:5] | .[] | .Name),
+      (if length > 5 then "..." else empty end)
+  '
